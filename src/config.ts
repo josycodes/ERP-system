@@ -24,3 +24,13 @@ export enum LEADS_STATUSES {
   REJECTED = 'rejected',
   CANCELLED = 'cancelled',
 }
+
+export enum ACTIVITY_TYPES {
+  EMAIL = 'email',
+  DOCUMENT = 'document',
+  TASK = 'task',
+  MEETING = 'meeting',
+  ASSIGN = 'assign',
+  LEAD = 'lead',
+  NOTE = 'note',
+}
