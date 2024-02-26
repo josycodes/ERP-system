@@ -14,13 +14,3 @@ export enum STATUSES {
   BLACKLISTED = 'blacklisted',
   DISABLED = 'disabled',
 }
-
-export enum LEADS_STATUSES {
-  NEW = 'new',
-  CONTACTED = 'contacted',
-  NEGOTIATION = 'negotiation',
-  PROPOSAL = 'proposal',
-  CLOSED = 'closed',
-  REJECTED = 'rejected',
-  CANCELLED = 'cancelled',
-}
