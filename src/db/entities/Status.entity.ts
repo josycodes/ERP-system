@@ -6,10 +6,10 @@ export class Status {
     @PrimaryGeneratedColumn()
     'id': number;
 
-    @Column()
+    @Column({ type: 'varchar', nullable: false })
     'name': string;
 
-    @Column()
+    @Column({ type: 'varchar', nullable: false })
     'slug': string;
 
     @Column(() => Base, { prefix: false })
