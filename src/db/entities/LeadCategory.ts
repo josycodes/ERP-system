@@ -1,12 +1,12 @@
 import {Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
 import {Base} from "./Base.entity";
 
-@Entity('categories')
-export class Category {
+@Entity('leads_categories')
+export class LeadCategory {
     @PrimaryGeneratedColumn()
     'id': number;
 
-    @Column()
+    @Column({ type: 'varchar', nullable: false })
     'name': string;
 
     @Column(() => Base, { prefix: false })

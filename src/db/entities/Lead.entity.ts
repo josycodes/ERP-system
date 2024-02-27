@@ -1,3 +1,13 @@
+
+import {
+    Entity, PrimaryGeneratedColumn,
+    Column, JoinColumn, ManyToOne, OneToOne
+} from 'typeorm';
+import { Customer } from "./Customer.entity";
+import { LeadCategory } from "./LeadCategory";
+import { LEADS_STATUSES } from "../../config";
+import { Base } from "./Base.entity";
+
 import {Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToOne} from 'typeorm';
 import {Customer} from "./Customer.entity";
 import {Category} from "./Category.entity";
@@ -8,16 +18,14 @@ export class Lead {
     @PrimaryGeneratedColumn()
     'id': number;
 
-    @Column({ name: 'lead_code', type: 'varchar', nullable: false })
-    'lead_code': string;
-
-    @JoinColumn({ name: 'customer_id' })
-    @ManyToOne(() => Customer)
+    @Column({ name: 'customer_id', type: 'int', nullable: true })
     'customer_id': number;
 
-    @JoinColumn({ name: 'category_id' })
-    @OneToOne(() => Category)
+    @Column({ name: 'category_id', type: 'int', nullable: true })
     'category_id': number;
+
+    @Column({ name: 'lead_code', type: 'varchar', nullable: false })
+    'lead_code': string;
 
     @Column({ name: 'message', type: 'text', nullable: false })
     'message': string;
@@ -28,8 +36,16 @@ export class Lead {
     @Column({ name: 'lead_value', type: 'numeric', nullable: true })
     'lead_value': number;
 
-    @Column({ name: 'lead_source', type: 'string', nullable: true })
+    @Column({ name: 'lead_source', type: 'varchar', nullable: true })
     'lead_source': string;
+
+    @JoinColumn({ name: 'customer_id' })
+    @ManyToOne(() => Customer)
+    'customer': number;
+
+    @JoinColumn({ name: 'category_id' })
+    @OneToOne(() => LeadCategory)
+    'category': number;
 
     @Column(() => Base, { prefix: false })
     'meta': Base;
