@@ -7,3 +7,15 @@ export interface ILeadsCreateRequest {
     message: string,
     preferred_contact_method : 'email' | 'phone' | 'either';
 }
+
+export interface ILeadGetRequest {
+    lead_id: number,
+}
+
+export interface ILeadUpdateRequest {
+    lead_value: number,
+}
+
+export interface ILeadUpdateStatusRequest {
+    status: string,
+}
