@@ -1,4 +1,3 @@
-
 import {
     Entity, PrimaryGeneratedColumn,
     Column, JoinColumn, ManyToOne, OneToOne
@@ -7,11 +6,6 @@ import { Customer } from "./Customer.entity";
 import { LeadCategory } from "./LeadCategory";
 import { LEADS_STATUSES } from "../../config";
 import { Base } from "./Base.entity";
-
-import {Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToOne} from 'typeorm';
-import {Customer} from "./Customer.entity";
-import {Category} from "./Category.entity";
-import {Base} from "./Base.entity";
 
 @Entity('leads')
 export class Lead {

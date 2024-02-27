@@ -1,13 +1,10 @@
 import express from 'express';
-import {
-  ILeadsCreateRequest,
-    ILeadsCreateRequest
-} from '../../interfaces/requests/leads.request.interface';
 import ResponseLib from '../../libs/Response.Lib';
 import LeadMapper from '../../mappers/Lead.Mapper';
 import LeadService from '../../services/Leads.service';
 import CustomerService from '../../services/Customer.service';
 import StatusService from "../../services/Status.service";
+import {ILeadsCreateRequest} from "../../interfaces/requests/leads.request.interface";
 
 export const createLead = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const body: ILeadsCreateRequest = req.body;
@@ -47,15 +44,6 @@ export const createLead = async (req: express.Request, res: express.Response, ne
   } catch (error) {
     next(error)
   }
-}
-        return new ResponseLib(req, res)
-            .json({
-                message: 'Lead Created Successfully',
-                data: LeadMapper.toDTO(lead)
-            });
-    } catch (error) {
-        next(error)
-    }
 }
 
 /**
