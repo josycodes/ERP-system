@@ -8,9 +8,11 @@ import {
  import { createLead, allLeads, getLead , updateLead, updateLeadStatus } from '../../controllers/leads/leads.controller';
  import { authorizeRequest } from '../../middlewares/authorization';
 import { IRequestQuery } from '../../interfaces/requests/request.interface';
+import documentRoutes from './media';
 
 const routes = Router();
 
+routes.use('/document', documentRoutes);
 routes.use(authorizeRequest);
 
 routes.post(
