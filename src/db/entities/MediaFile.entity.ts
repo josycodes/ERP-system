@@ -8,12 +8,10 @@ export class MediaFile {
   @PrimaryGeneratedColumn()
   'id': number;
 
-  @JoinColumn({ name: 'user_id' })
-  @ManyToOne(() => User)
+  @Column({ name: 'user_id', type: 'int', nullable: true })
   'user_id': number;
 
-  @JoinColumn({ name: 'lead_id' })
-  @ManyToOne(() => Lead)
+  @Column({ name: 'lead_id', type: 'int', nullable: true })
   'lead_id': number;
 
   @Column({ name: 'name', type: 'varchar', nullable: false })
@@ -27,6 +25,14 @@ export class MediaFile {
 
   @Column({ name: 'url', type: 'varchar', nullable: true })
   'url': string;
+
+  @JoinColumn({ name: 'user_id' })
+  @ManyToOne(() => User)
+  'user': User;
+
+  @JoinColumn({ name: 'lead_id' })
+  @ManyToOne(() => Lead)
+  'lead': Lead;
 
   @Column(() => Base, { prefix: false })
   'meta': Base;
