@@ -5,6 +5,10 @@ import LeadService from '../../services/Leads.service';
 import CustomerService from '../../services/Customer.service';
 import StatusService from "../../services/Status.service";
 import {ILeadsCreateRequest} from "../../interfaces/requests/leads.request.interface";
+import { IRequestQuery } from '../../interfaces/requests/request.interface';
+import { Lead } from '../../db/entities/Lead.entity';
+import UtilsService from '../../services/Utils.Service';
+import { BadRequest } from '../../libs/Error.Lib';
 
 export const createLead = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const body: ILeadsCreateRequest = req.body;
@@ -12,35 +16,35 @@ export const createLead = async (req: express.Request, res: express.Response, ne
   const customerService = new CustomerService();
   try {
     // Check if the customer exists, then create a new customer if necessary
-    let customerId;
+    let customer;
     const existingCustomer = await customerService.getCustomerByEmail(body.email);
     if (!existingCustomer) {
       // Create a new customer
-      const newCustomer = await customerService.createCustomer({
+      customer = await customerService.createCustomer({
         name: body.name,
         email: body.email,
         phone: body.phone,
         address: body.address,
         preferred_contact_method: body.preferred_contact_method
       });
-      customerId = newCustomer.id;
     } else {
-      customerId = existingCustomer.id;
+      customer = existingCustomer;
     }
 
     // Create the lead
     const lead = await leadService.createLead({
-      customer_id: customerId,
-      category_id: body.leads_category,
-      message: body.message
+        customer_id: customer.id,
+        category_id: body.leads_category,
+        message: body.message
     });
 
-
     return new ResponseLib(req, res)
-      .json({
-        message: 'Lead Created Successfully',
-        data: LeadMapper.toDTO(lead)
-      });
+        .status(201)
+        .json({
+            status: true,
+            message: 'Lead Created Successfully',
+            data: LeadMapper.toDTO({...lead, customer })
+        });
   } catch (error) {
     next(error)
   }
@@ -54,18 +58,17 @@ export const createLead = async (req: express.Request, res: express.Response, ne
  */
 export const allLeads = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const leadService = new LeadService();
+    const { page, limit, status, from, to, customer_id, search }: IRequestQuery = req.query;
 
     try {
         // Get all Leads
-        const leads = await leadService.allLeads();
-        const leadsDTO = await Promise.all(leads.map(async (lead) => {
-            return await LeadMapper.toDTO(lead);
-        }));
-
+        const leads = await leadService.allLeads(Number(customer_id), search, Number(page), Number(limit), status as Lead['status'], from, to);
         return new ResponseLib(req, res)
             .json({
+                status: true,
                 message: 'Leads Loaded Successfully',
-                data: leadsDTO
+                data: leads.items.map(lead => LeadMapper.toDTO(lead)),
+                meta: UtilsService.paginate(req.query, leads)
             });
     } catch (error) {
         next(error)
@@ -78,14 +81,10 @@ export const getLead = async (req: express.Request, res: express.Response, next:
     try {
         // Get Lead
         const lead = await leadService.findLeadById(parseInt(lead_id));
-        if (!lead) {
-            return new ResponseLib(req, res)
-                .json({
-                    message: 'Lead Not Found'
-                });
-        }
+        if (!lead) throw new BadRequest('Lead not found.')
         return new ResponseLib(req, res)
             .json({
+                status: true,
                 message: 'Lead Loaded Successfully',
                 data: LeadMapper.toDTO(lead)
             });
@@ -101,29 +100,16 @@ export const updateLead = async (req: express.Request, res: express.Response, ne
     try {
         // Get Lead
         const lead = await leadService.findLeadById(parseInt(lead_id));
-        if (!lead) {
-            return new ResponseLib(req, res)
-                .json({
-                    message: 'Lead Not Found'
-                });
-        }
+        if (!lead) throw new BadRequest('Lead not found.')
 
         //update lead
-        const newLeadData = {
-            lead_value: lead_value
-        }
-        const updatedLead = await leadService.updateLead(lead, newLeadData);
-
-        if (!updatedLead) {
-            return new ResponseLib(req, res)
-                .json({
-                    message: 'Lead Not Updated'
-                });
-        }
+        const updatedLead = await leadService.updateLead(Number(lead_id), { lead_value });
+        if (!updatedLead) throw new BadRequest('Failed to Update lead.');
 
         return new ResponseLib(req, res)
             .json({
-                message: 'Lead Loaded Successfully',
+                status: true,
+                message: 'Lead updated Successfully',
                 data: LeadMapper.toDTO(updatedLead)
             });
     } catch (error) {
@@ -137,37 +123,23 @@ export const updateLeadStatus = async (req: express.Request, res: express.Respon
     const leadService = new LeadService();
     const statusService = new StatusService();
     try {
-
         const allStatuses = await statusService.allStatuses();
         const allowedStatuses = allStatuses.map(status => status.slug);
 
         // Check if the provided status exists in the list of allowed statuses
-        if (!allowedStatuses.includes(status)) {
-            return new ResponseLib(req, res).status(400).json({ error: 'Invalid status provided' });
-        }
+        if (!allowedStatuses.includes(status)) throw new BadRequest('Invalid status provided');
 
         // Get Lead
         const lead = await leadService.findLeadById(parseInt(lead_id));
-        if (!lead) {
-            return new ResponseLib(req, res)
-                .json({
-                    message: 'Lead Not Found'
-                });
-        }
+        if (!lead) throw new BadRequest('Lead Not Found');
 
         //update lead
-        const newLeadData = { status: status }
-        const updatedLead = await leadService.updateLead(lead, newLeadData);
-
-        if (!updatedLead) {
-            return new ResponseLib(req, res)
-                .json({
-                    message: 'Lead Not Updated'
-                });
-        }
+        const updatedLead = await leadService.updateLead(Number(lead_id), { status });
+        if (!updatedLead) throw new BadRequest('Failed to update lead.')
 
         return new ResponseLib(req, res)
             .json({
+                status: true,
                 message: 'Lead Loaded Successfully',
                 data: LeadMapper.toDTO(updatedLead)
             });

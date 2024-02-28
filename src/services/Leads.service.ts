@@ -1,10 +1,14 @@
-import {Lead} from "../db/entities/Lead.entity";
-import {ClientDataSource} from "../db/datasource.config";
-import {LeadCreateData} from "../interfaces/leads.interface";
+import { Lead } from "../db/entities/Lead.entity";
+import { ClientDataSource } from "../db/datasource.config";
+import { LeadCreateData } from "../interfaces/leads.interface";
+import { PaginatedTotal } from '../interfaces/responses/pagination.response.interface';
 
 
 import 'dotenv/config';
 import DBAdapter from "../adapters/DBAdapter";
+import { IRequestQuery } from "../interfaces/requests/request.interface";
+import { Between, ILike, IsNull, Not } from "typeorm";
+import moment from "moment";
 
 export default class LeadsService {
   constructor() { };
@@ -16,12 +20,14 @@ export default class LeadsService {
   async createLead(data: LeadCreateData): Promise<Lead> {
     const { customer_id, category_id, message } = data;
 
-    return await new DBAdapter().insertAndFetch(Lead, {
-        lead_code: await this.generateLeadCode(),
+    const lead_code =  await this.generateLeadCode();
+    const lead = await new DBAdapter().insertAndFetch(Lead, {
+        lead_code,
         customer_id,
         category_id,
         message,
     })
+    return lead;
   }
 
   /**
@@ -30,14 +36,14 @@ export default class LeadsService {
   async generateLeadCode(): Promise<string> {
       // Get the prefix from the environment variable LEAD_CODE
       const prefix = process.env.LEADS_CODE || '';
-      const latestLead = await new DBAdapter().findOne(Lead, {
+      const latestLead = await new DBAdapter().find(Lead, {
           order: {id: 'DESC'}
       });
 
       let leadNumber: number | null = null; // Initialize leadNumber as null
-      if (latestLead && latestLead.lead_code.startsWith(prefix)) {
+      if (latestLead && latestLead[0]?.lead_code?.startsWith(prefix)) {
           // Extract the number part by removing the prefix and parsing it as a number
-          leadNumber = parseInt(latestLead.lead_code.slice(prefix.length));
+          leadNumber = parseInt(latestLead[0].lead_code.slice(prefix.length));
       }
 
       // Increment the lead number by 1 or default to 1 if no latest lead
@@ -60,19 +66,46 @@ export default class LeadsService {
     /**
      * Get all leads
      */
-    async allLeads() {
-        return await ClientDataSource.getRepository(Lead).find();
+    async allLeads(
+        customer_id: number,
+        search: string,
+        page: number,
+        limit: number,
+        status?: Lead['status'],
+        from?: string, to?: string
+    ):  Promise<PaginatedTotal<Lead>> {
+        const skip = (page - 1) * limit;
+        const [leads, total] =  await new DBAdapter().findAndCount(Lead, {
+            where: {
+                lead_code: !search ? Not(IsNull()) : ILike("%" + search + "%"),
+                customer_id: !customer_id ? Not(IsNull()): customer_id,
+                status: !status ? Not(IsNull()) : status, 
+                meta: {
+                  deleted_flag: false,
+                  created_on: from && to ? Between(moment(from).toDate(), moment(to).add(1, 'days').toDate()) : undefined
+                }},
+            skip,
+            take: limit,
+            relations: { customer: true, category: true },
+            order: { id: 'DESC' }
+        })
+        return {items: leads, total};
     }
 
     async findLeadById(id: number): Promise<Lead | null> {
-        return await ClientDataSource.getRepository(Lead).findOne({ where: { id: id } });
+        return await new DBAdapter().findOne(Lead, { 
+            where: { id: id },
+            relations: { customer: true, category: true },
+        });
     }
 
-    async updateLead(lead: Lead, newLeadData: Partial<Lead>): Promise<Lead | null> {
-        // Update the lead's properties with the new data
-        Object.assign(lead, newLeadData);
-
+    async updateLead(id: number, newLeadData: Partial<Lead>): Promise<Lead | null> {
+        const { lead_value, status, lead_source } = newLeadData;
         // Save the updated lead to the database
-        return await ClientDataSource.getRepository(Lead).save(lead);
+        return await new DBAdapter().updateAndFetch(Lead, { id }, {
+            lead_value,
+            status,
+            lead_source
+        })
     }
 }

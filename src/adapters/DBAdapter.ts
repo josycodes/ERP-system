@@ -108,6 +108,6 @@ export default class DBAdapter {
       // @ts-ignore
       return instance.getRepository(table).find({ where: { id: In(result.generatedMaps.map(({ id }) => id)) } }) as unknown as T
     }
-    return instance.getRepository(table).findOne({ where: { id: result.raw.insertId } }) as unknown as T
+    return instance.getRepository(table).findOne({ where: { id: result.raw[0].id } }) as unknown as T
   }
 }

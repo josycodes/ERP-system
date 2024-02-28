@@ -7,6 +7,7 @@ import {
 } from '../../interfaces/requests/leads.request.interface';
  import { createLead, allLeads, getLead , updateLead, updateLeadStatus } from '../../controllers/leads/leads.controller';
  import { authorizeRequest } from '../../middlewares/authorization';
+import { IRequestQuery } from '../../interfaces/requests/request.interface';
 
 const routes = Router();
 
@@ -28,7 +29,20 @@ routes.post(
     createLead
 );
 
-routes.get('/list', allLeads);
+routes.get('/list',
+    celebrate({
+        [Segments.QUERY]: Joi.object<IRequestQuery, true>({
+        search: Joi.string(),
+        page: Joi.number().positive().default(1),
+        limit: Joi.number().positive().default(10).max(100),
+        status: Joi.string(),
+        customer_id: Joi.number().positive(),
+        from: Joi.string().isoDate(),
+        to: Joi.string().isoDate()
+        })
+    }),
+    allLeads
+);
 
 routes.get('/list/:lead_id'
     ,celebrate({
@@ -38,25 +52,25 @@ routes.get('/list/:lead_id'
     }),
     getLead);
 
-routes.post('/update/:lead_id',
+routes.patch('/update/:lead_id',
     celebrate({
+        [Segments.PARAMS]: Joi.object<ILeadGetRequest, true>({
+            lead_id: Joi.number().positive()
+        }),
         [Segments.BODY]: Joi.object<ILeadUpdateRequest, true>({
             lead_value: Joi.number().required(),
         }),
-        [Segments.PARAMS]: Joi.object<ILeadGetRequest, true>({
-            lead_id: Joi.number().positive()
-        })
     }),
     updateLead);
 
-routes.post('/update/status/:lead_id',
+routes.patch('/update/status/:lead_id',
     celebrate({
+        [Segments.PARAMS]: Joi.object<ILeadGetRequest, true>({
+            lead_id: Joi.number().positive()
+        }),
         [Segments.BODY]: Joi.object<ILeadUpdateStatusRequest, true>({
             status: Joi.string().required(),
         }),
-        [Segments.PARAMS]: Joi.object<ILeadGetRequest, true>({
-            lead_id: Joi.number().positive()
-        })
     }),
     updateLeadStatus);
 
