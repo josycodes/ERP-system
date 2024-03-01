@@ -9,8 +9,9 @@ export const uploadFileMiddleware = (req: Request, res: Response, next: NextFunc
         if (err) {
             throw new ErrorLib('Error parsing file data', 400)
         }
+
         // Retrieve the file from the Formidable parsed files
-        const file: formidable.File | undefined = files['file'];
+        const file: any = Array.isArray(files['file']) ? files['file'][0] : files['file'];
 
         if (!file) {
             throw new ErrorLib('No file uploaded', 400)

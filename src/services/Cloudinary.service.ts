@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
+import LoggerLib from "../libs/Logger.Lib";
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
@@ -26,7 +27,7 @@ class CloudinaryService {
             const result = await cloudinary.uploader.upload(path, options);
             return result.secure_url;
         } catch (error) {
-            console.log(error);
+            LoggerLib.error('Error uploading file to Cloudinary', error);
             throw new Error('Error uploading file to Cloudinary');
         }
     }

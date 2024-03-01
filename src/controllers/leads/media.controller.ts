@@ -16,20 +16,21 @@ export const documentUpload = async (req: express.Request, res: express.Response
     try {
         //get lead
         const lead = await leadService.findLeadById(parseInt(lead_id));
-        if (!lead) throw new BadRequest('Lead not found.')
-
+        if (!lead) throw new BadRequest('Lead not found.');
+        const file = req.file as any;
         //upload to cloudinary
-        if (req.file && "path" in req.file) {
-            const uploaded_document_url = await CloudinaryService.uploadFile(req.file.path, {
-                upload_preset: 'leads',
-                public_id: req.file.filename,
+        if (file && file.filepath) {
+            const uploaded_document_url = await CloudinaryService.uploadFile(file.filepath, {
+                upload_preset: process.env.CLOUDINARY_LEAD_DOCUMENT_PRESET,
+                public_id: file.originalFilename,
                 overwrite: true
             });
+
             //save to database
             const media = await mediaService.createMedia({
                 user_id: req.user.id,
                 lead_id: lead.id,
-                name: req.file.filename,
+                name: file.originalFilename,
                 url: uploaded_document_url
             });
 

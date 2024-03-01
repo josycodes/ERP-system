@@ -1,9 +1,7 @@
-import { MediaFile } from "../db/entities/MediaFile.entity";
-import { ClientDataSource } from "../db/datasource.config";
-import { MediaCreateData } from "../interfaces/media.interface";
+import {MediaFile} from "../db/entities/MediaFile.entity";
+import {ClientDataSource} from "../db/datasource.config";
+import {MediaCreateData} from "../interfaces/media.interface";
 import LoggerLib from "../libs/Logger.Lib";
-import DBAdapter from "../adapters/DBAdapter";
-import {Lead} from "../db/entities/Lead.entity";
 
 export default class MediaService {
     constructor() { };
@@ -23,10 +21,10 @@ export default class MediaService {
         return await ClientDataSource.getRepository(MediaFile).save(media);
     }
 
-    async getAllMediaByLeadId(lead_id: number): Promise<MediaFile | null> {
-        return await new DBAdapter().find(MediaFile, {
-            where: { lead_id: lead_id },
-            relations: { user: true, lead: true },
+    async getAllMediaByLeadId(lead_id: number): Promise<MediaFile[]> {
+        return await ClientDataSource.getRepository(MediaFile).find({
+            where: {lead_id: lead_id},
+            relations: ["user", "lead"] // Assuming "user" and "lead" are the relations defined in your MediaFile entity
         });
     }
 
