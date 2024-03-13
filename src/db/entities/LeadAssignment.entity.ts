@@ -8,13 +8,19 @@ export class LeadAssignment {
     @PrimaryGeneratedColumn()
     'id': number;
 
+    @Column({ name: 'lead_id', type: 'int', nullable: true })
+    'lead_id': number;
+
+    @Column({ name: 'user_id', type: 'int', nullable: true })
+    'user_id': number;
+
     @JoinColumn({ name: 'lead_id' })
     @OneToOne(() => Lead)
-    'lead_id': number;
+    'lead': Lead;
 
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(() => User)
-    'user_id': number;
+    'user': User;
 
     @Column(() => Base, { prefix: false })
     'meta': Base;

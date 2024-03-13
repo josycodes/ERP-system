@@ -111,7 +111,7 @@ class DBAdapter {
             return instance.getRepository(table).update(criteria, data);
         });
     }
-    updateAndFetch(table, criteria, data, parameters) {
+    updateAndFetch(table, criteria, data, parameters, relations) {
         return __awaiter(this, void 0, void 0, function* () {
             Logger_Lib_1.default.log('updateAndFetch', { table, criteria, data, parameters });
             const instance = yield this.getInstance();
@@ -119,7 +119,7 @@ class DBAdapter {
             if (parameters)
                 builder.setParameters(parameters);
             yield builder.execute();
-            return instance.getRepository(table).findOne({ where: criteria });
+            return instance.getRepository(table).findOne({ where: criteria, relations });
         });
     }
     insert(table, data) {
@@ -129,16 +129,23 @@ class DBAdapter {
             return instance.getRepository(table).insert(data);
         });
     }
-    insertAndFetch(table, data) {
+    insertAndFetch(table, data, relations) {
         return __awaiter(this, void 0, void 0, function* () {
             Logger_Lib_1.default.log('insertAndFetch', { table, data });
             const instance = yield this.getInstance();
             const result = yield instance.getRepository(table).insert(data);
             if (Array.isArray(data)) {
                 // @ts-ignore
-                return instance.getRepository(table).find({ where: { id: (0, typeorm_1.In)(result.generatedMaps.map(({ id }) => id)) } });
+                return instance.getRepository(table).find({ where: { id: (0, typeorm_1.In)(result.generatedMaps.map(({ id }) => id)) }, relations });
             }
-            return instance.getRepository(table).findOne({ where: { id: result.raw[0].id } });
+            return instance.getRepository(table).findOne({ where: { id: result.raw[0].id }, relations });
+        });
+    }
+    delete(table, criteria) {
+        return __awaiter(this, void 0, void 0, function* () {
+            Logger_Lib_1.default.log('delete', { table, criteria });
+            const instance = yield this.getInstance();
+            yield instance.getRepository(table).delete(criteria);
         });
     }
 }

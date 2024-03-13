@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ACTIVITY_TYPES = exports.LEADS_STATUSES = exports.STATUSES = exports.CONFIG_OPTIONS = void 0;
+exports.NOTE_STATUS = exports.ACTIVITY_TYPES = exports.LEADS_STATUSES = exports.STATUSES = exports.CONFIG_OPTIONS = void 0;
 var CONFIG_OPTIONS;
 (function (CONFIG_OPTIONS) {
 })(CONFIG_OPTIONS || (exports.CONFIG_OPTIONS = CONFIG_OPTIONS = {}));
@@ -37,3 +37,9 @@ var ACTIVITY_TYPES;
     ACTIVITY_TYPES["LEAD"] = "lead";
     ACTIVITY_TYPES["NOTE"] = "note";
 })(ACTIVITY_TYPES || (exports.ACTIVITY_TYPES = ACTIVITY_TYPES = {}));
+var NOTE_STATUS;
+(function (NOTE_STATUS) {
+    NOTE_STATUS["DRAFT"] = "draft";
+    NOTE_STATUS["DONE"] = "done";
+    NOTE_STATUS["AUTO_SAVE"] = "auto-save";
+})(NOTE_STATUS || (exports.NOTE_STATUS = NOTE_STATUS = {}));

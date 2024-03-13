@@ -1,13 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class UserMapper {
+class TagMapper {
     static toDTO(user) {
-        var _a;
         return {
             id: user.id,
             email: user.email,
             name: user.name,
-            status: user.status,
             picture: user.profile_picture
                 ? {
                     id: user.profile_picture.id,
@@ -16,8 +14,7 @@ class UserMapper {
                     url: user.profile_picture.url,
                 }
                 : null,
-            created_on: (_a = user.meta) === null || _a === void 0 ? void 0 : _a.created_on
         };
     }
 }
-exports.default = UserMapper;
+exports.default = TagMapper;

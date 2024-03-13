@@ -86,18 +86,24 @@ const allLeads = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.allLeads = allLeads;
 const getLead = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { lead_id } = req.params;
     const leadService = new Leads_service_1.default();
     try {
         // Get Lead
         const lead = yield leadService.findLeadById(parseInt(lead_id));
+        const leadAssignment = yield leadService.findLeadAssignment(parseInt(lead_id));
         if (!lead)
             throw new Error_Lib_1.BadRequest('Lead not found.');
         return new Response_Lib_1.default(req, res)
             .json({
             status: true,
             message: 'Lead Loaded Successfully',
-            data: Lead_Mapper_1.default.toDTO(lead)
+            data: Object.assign(Object.assign({}, Lead_Mapper_1.default.toDTO(lead)), { LeadAssignment: {
+                    id: leadAssignment === null || leadAssignment === void 0 ? void 0 : leadAssignment.user.id,
+                    name: leadAssignment === null || leadAssignment === void 0 ? void 0 : leadAssignment.user.name,
+                    picture: (_a = leadAssignment === null || leadAssignment === void 0 ? void 0 : leadAssignment.user.profile_picture) === null || _a === void 0 ? void 0 : _a.url
+                } })
         });
     }
     catch (error) {

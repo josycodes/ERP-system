@@ -1,12 +1,12 @@
+import { Customer } from "../db/entities/Customer.entity";
 import { User } from "../db/entities/User.entity";
 
-export default class UserMapper {
-  public static toDTO(user: User) {
+export default class TagMapper {
+  public static toDTO(user: any ) {
     return {
       id: user.id,
       email: user.email,
       name: user.name,
-      status: user.status,
       picture: user.profile_picture
         ? {
           id: user.profile_picture.id,
@@ -15,7 +15,6 @@ export default class UserMapper {
           url: user.profile_picture.url,
         }
         : null,
-      created_on: user.meta?.created_on
     }
   }
 }

@@ -6,33 +6,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MediaFile = void 0;
+exports.NoteTag = void 0;
 const typeorm_1 = require("typeorm");
 const Base_entity_1 = require("./Base.entity");
-let MediaFile = class MediaFile {
+const Note_entity_1 = require("./Note.entity");
+const Customer_entity_1 = require("./Customer.entity");
+let NoteTag = class NoteTag {
 };
-exports.MediaFile = MediaFile;
+exports.NoteTag = NoteTag;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)()
-], MediaFile.prototype, "id", void 0);
+], NoteTag.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'user_id', type: 'int', nullable: false })
-], MediaFile.prototype, "user_id", void 0);
+    (0, typeorm_1.Column)({ type: 'int', nullable: true })
+], NoteTag.prototype, "note_id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'name', type: 'varchar', nullable: false })
-], MediaFile.prototype, "name", void 0);
+    (0, typeorm_1.Column)({ type: 'int', nullable: true })
+], NoteTag.prototype, "user_id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'description', type: 'varchar', nullable: true })
-], MediaFile.prototype, "description", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'note_id' }),
+    (0, typeorm_1.ManyToOne)(() => Note_entity_1.Note, { nullable: true })
+], NoteTag.prototype, "note", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'object_key', type: 'varchar', nullable: false })
-], MediaFile.prototype, "object_key", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ name: 'url', type: 'varchar', nullable: true })
-], MediaFile.prototype, "url", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
+    (0, typeorm_1.ManyToOne)(() => Customer_entity_1.Customer, { nullable: true })
+], NoteTag.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.Column)(() => Base_entity_1.Base, { prefix: false })
-], MediaFile.prototype, "meta", void 0);
-exports.MediaFile = MediaFile = __decorate([
-    (0, typeorm_1.Entity)('media_files')
-], MediaFile);
+], NoteTag.prototype, "meta", void 0);
+exports.NoteTag = NoteTag = __decorate([
+    (0, typeorm_1.Entity)('note_tags')
+], NoteTag);

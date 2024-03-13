@@ -8,23 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const DBAdapter_1 = __importDefault(require("../adapters/DBAdapter"));
-const LeadCategory_1 = require("../db/entities/LeadCategory");
-class UtilsService {
-    static paginate(query, result) {
-        return {
-            limit: query.limit, total: result.total, page: query.page,
-            pages: Math.ceil(Number(result.total) / Number(query.limit))
-        };
-    }
-    static getCategories() {
+class MediaService {
+    // constructor(lead: Lead) {}
+    storeNote() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield new DBAdapter_1.default().find(LeadCategory_1.LeadCategory, { where: { meta: { deleted_flag: false } } });
         });
     }
 }
-exports.default = UtilsService;
+exports.default = MediaService;

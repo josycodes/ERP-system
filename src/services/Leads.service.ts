@@ -9,6 +9,7 @@ import DBAdapter from "../adapters/DBAdapter";
 import { IRequestQuery } from "../interfaces/requests/request.interface";
 import { Between, ILike, IsNull, Not } from "typeorm";
 import moment from "moment";
+import { LeadAssignment } from "../db/entities/LeadAssignment.entity";
 
 export default class LeadsService {
   constructor() { };
@@ -96,6 +97,13 @@ export default class LeadsService {
         return await new DBAdapter().findOne(Lead, { 
             where: { id: id },
             relations: { customer: true, category: true },
+        });
+    }
+
+    async findLeadAssignment(id: number): Promise<LeadAssignment | null> {
+        return await new DBAdapter().findOne(LeadAssignment, { 
+            where: { lead_id: id },
+            relations: { user: true },
         });
     }
 

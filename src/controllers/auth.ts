@@ -1,9 +1,7 @@
 import express from 'express';
-
 import {
   IAuthLoginRequest,
 } from '../interfaces/requests/auth.request.interface';
-
 import ErrorLib, { BadRequest, NotFound } from '../libs/Error.Lib';
 import ResponseLib from '../libs/Response.Lib';
 import UserMapper from '../mappers/User.Mapper';
@@ -24,7 +22,10 @@ export const login = async (req: express.Request, res: express.Response, next: e
     return new ResponseLib(req, res)
       .setHeader({ 'access-token': token }).json({
         message: 'Successfully logged in',
-        data: UserMapper.toDTO(user)
+        data: {
+          user: UserMapper.toDTO(user),
+          token
+        }
       });
   } catch (error) {
     if (error instanceof NotFound || error instanceof BadRequest) {

@@ -9,16 +9,13 @@ export class User {
   'id': number;
 
   @Column({ type: 'varchar', nullable: true })
+  'name': string;
+
+  @Column({ type: 'varchar', nullable: true })
   'email': string;
 
   @Column({ type: 'varchar', nullable: false })
   'password': string;
-
-  @Column({ type: 'varchar', nullable: true })
-  'first_name': string;
-
-  @Column({ type: 'varchar', nullable: true })
-  'last_name': string;
 
   @Column({ type: 'varchar', nullable: false, default: STATUSES.PENDING })
   'status': STATUSES.PENDING | STATUSES.ACTIVE | STATUSES.DISABLED;

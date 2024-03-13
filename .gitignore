@@ -5,6 +5,5 @@ node_modules
 sandbox
 yarn.lock
 .DS_Store
-build/
 .DS_Store
 *.env

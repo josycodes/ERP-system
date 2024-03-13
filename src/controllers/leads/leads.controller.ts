@@ -9,6 +9,7 @@ import { IRequestQuery } from '../../interfaces/requests/request.interface';
 import { Lead } from '../../db/entities/Lead.entity';
 import UtilsService from '../../services/Utils.Service';
 import { BadRequest } from '../../libs/Error.Lib';
+import { LeadAssignment } from '../../db/entities/LeadAssignment.entity';
 
 export const createLead = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const body: ILeadsCreateRequest = req.body;
@@ -81,12 +82,20 @@ export const getLead = async (req: express.Request, res: express.Response, next:
     try {
         // Get Lead
         const lead = await leadService.findLeadById(parseInt(lead_id));
+        const leadAssignment = await leadService.findLeadAssignment(parseInt(lead_id));
         if (!lead) throw new BadRequest('Lead not found.')
         return new ResponseLib(req, res)
             .json({
                 status: true,
                 message: 'Lead Loaded Successfully',
-                data: LeadMapper.toDTO(lead)
+                data: {
+                    ...LeadMapper.toDTO(lead),
+                    LeadAssignment: {
+                        id: leadAssignment?.user.id,
+                        name: leadAssignment?.user.name,
+                        picture: leadAssignment?.user.profile_picture?.url
+                    }
+                }
             });
     } catch (error) {
         next(error)

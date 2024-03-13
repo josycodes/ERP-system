@@ -34,3 +34,8 @@ export enum ACTIVITY_TYPES {
   LEAD = 'lead',
   NOTE = 'note',
 }
+export enum NOTE_STATUS {
+  DRAFT = 'draft',
+  DONE = 'done',
+  AUTO_SAVE = 'auto-save'
+}

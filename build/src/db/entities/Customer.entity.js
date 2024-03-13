@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Customer = void 0;
 const typeorm_1 = require("typeorm");
 const Base_entity_1 = require("./Base.entity");
+const MediaFile_entity_1 = require("./MediaFile.entity");
 let Customer = class Customer {
 };
 exports.Customer = Customer;
@@ -30,6 +31,13 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ name: 'preferred_contact_method', type: 'varchar', nullable: true, default: 'email' })
 ], Customer.prototype, "preferred_contact_method", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'profile_picture_id', type: 'int', nullable: true })
+], Customer.prototype, "profile_picture_id", void 0);
+__decorate([
+    (0, typeorm_1.JoinColumn)({ name: 'profile_picture_id' }),
+    (0, typeorm_1.ManyToOne)(() => MediaFile_entity_1.MediaFile, { nullable: true })
+], Customer.prototype, "profile_picture", void 0);
 __decorate([
     (0, typeorm_1.Column)(() => Base_entity_1.Base, { prefix: false })
 ], Customer.prototype, "meta", void 0);

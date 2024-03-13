@@ -41,8 +41,7 @@ class ProfileService extends Auth_Service_1.default {
                     throw new Error_Lib_1.NotFound('Media file does not exist.');
             }
             const user = yield new DBAdapter_1.default().updateAndFetch(User_entity_1.User, { id: this.user.id, meta: { deleted_flag: false } }, {
-                first_name: data.first_name,
-                last_name: data.last_name,
+                name: data.name,
                 profile_picture_id: data.profile_picture_id
             });
             return user;

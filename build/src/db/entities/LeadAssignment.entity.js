@@ -18,13 +18,19 @@ __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)()
 ], LeadAssignment.prototype, "id", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ name: 'lead_id', type: 'int', nullable: true })
+], LeadAssignment.prototype, "lead_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'user_id', type: 'int', nullable: true })
+], LeadAssignment.prototype, "user_id", void 0);
+__decorate([
     (0, typeorm_1.JoinColumn)({ name: 'lead_id' }),
     (0, typeorm_1.OneToOne)(() => Lead_entity_1.Lead)
-], LeadAssignment.prototype, "lead_id", void 0);
+], LeadAssignment.prototype, "lead", void 0);
 __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
     (0, typeorm_1.ManyToOne)(() => User_entity_1.User)
-], LeadAssignment.prototype, "user_id", void 0);
+], LeadAssignment.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.Column)(() => Base_entity_1.Base, { prefix: false })
 ], LeadAssignment.prototype, "meta", void 0);

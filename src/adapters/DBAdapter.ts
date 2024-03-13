@@ -85,13 +85,13 @@ export default class DBAdapter {
     return instance.getRepository(table).update(criteria, data)
   }
 
-  async updateAndFetch<T extends ObjectLiteral>(table: EntityTarget<T> | string, criteria: FindOptionsWhere<T>, data: QueryDeepPartialEntity<T>, parameters?: any): Promise<T> {
+  async updateAndFetch<T extends ObjectLiteral>(table: EntityTarget<T> | string, criteria: FindOptionsWhere<T>, data: QueryDeepPartialEntity<T>, parameters?: any, relations?: any): Promise<T> {
     LoggerLib.log('updateAndFetch', { table, criteria, data, parameters })
     const instance = await this.getInstance();
     const builder = instance.getRepository(table).createQueryBuilder().update().set(data).where(criteria);
     if (parameters) builder.setParameters(parameters);
     await builder.execute();
-    return instance.getRepository(table).findOne({ where: criteria }) as unknown as T
+    return instance.getRepository(table).findOne({ where: criteria, relations }) as unknown as T
   }
 
   async insert<T extends ObjectLiteral>(table: EntityTarget<T> | string, data: QueryDeepPartialEntity<T> | QueryDeepPartialEntity<T>[]): Promise<InsertResult> {
@@ -100,14 +100,20 @@ export default class DBAdapter {
     return instance.getRepository(table).insert(data)
   }
 
-  async insertAndFetch<T extends ObjectLiteral>(table: EntityTarget<T> | string, data: QueryDeepPartialEntity<T> | QueryDeepPartialEntity<T>[]): Promise<T> {
+  async insertAndFetch<T extends ObjectLiteral>(table: EntityTarget<T> | string, data: QueryDeepPartialEntity<T> | QueryDeepPartialEntity<T>[], relations?: any): Promise<T> {
     LoggerLib.log('insertAndFetch', { table, data })
     const instance = await this.getInstance();
     const result = await instance.getRepository(table).insert(data)
     if (Array.isArray(data)) {
       // @ts-ignore
-      return instance.getRepository(table).find({ where: { id: In(result.generatedMaps.map(({ id }) => id)) } }) as unknown as T
+      return instance.getRepository(table).find({ where: { id: In(result.generatedMaps.map(({ id }) => id)) }, relations }) as unknown as T
     }
-    return instance.getRepository(table).findOne({ where: { id: result.raw[0].id } }) as unknown as T
+    return instance.getRepository(table).findOne({ where: { id: result.raw[0].id }, relations }) as unknown as T
+  }
+
+  async delete<T extends ObjectLiteral>(table: EntityTarget<T> | string, criteria: FindOptionsWhere<T>): Promise<void> {
+    LoggerLib.log('delete', { table, criteria })
+    const instance = await this.getInstance();
+    await instance.getRepository(table).delete(criteria)
   }
 }

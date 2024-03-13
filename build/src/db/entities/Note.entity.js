@@ -6,39 +6,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Note = void 0;
 const typeorm_1 = require("typeorm");
 const config_1 = require("../../config");
 const Base_entity_1 = require("./Base.entity");
-const MediaFile_entity_1 = require("./MediaFile.entity");
-let User = class User {
+const User_entity_1 = require("./User.entity");
+let Note = class Note {
 };
-exports.User = User;
+exports.Note = Note;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)()
-], User.prototype, "id", void 0);
+], Note.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'int', nullable: true })
+], Note.prototype, "lead_id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', nullable: true })
-], User.prototype, "name", void 0);
+], Note.prototype, "title", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', nullable: true })
-], User.prototype, "email", void 0);
+    (0, typeorm_1.Column)({ type: 'text', nullable: false })
+], Note.prototype, "content", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', nullable: false })
-], User.prototype, "password", void 0);
+    (0, typeorm_1.Column)({ type: 'varchar', nullable: false, default: config_1.NOTE_STATUS.DRAFT })
+], Note.prototype, "status", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', nullable: false, default: config_1.STATUSES.PENDING })
-], User.prototype, "status", void 0);
+    (0, typeorm_1.Column)({ type: 'int', nullable: true })
+], Note.prototype, "owner_id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'profile_picture_id', type: 'int', nullable: true })
-], User.prototype, "profile_picture_id", void 0);
-__decorate([
-    (0, typeorm_1.JoinColumn)({ name: 'profile_picture_id' }),
-    (0, typeorm_1.ManyToOne)(() => MediaFile_entity_1.MediaFile, { nullable: true })
-], User.prototype, "profile_picture", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'owner_id' }),
+    (0, typeorm_1.ManyToOne)(() => User_entity_1.User, (user) => user)
+], Note.prototype, "owner", void 0);
 __decorate([
     (0, typeorm_1.Column)(() => Base_entity_1.Base, { prefix: false })
-], User.prototype, "meta", void 0);
-exports.User = User = __decorate([
-    (0, typeorm_1.Entity)('users')
-], User);
+], Note.prototype, "meta", void 0);
+exports.Note = Note = __decorate([
+    (0, typeorm_1.Entity)('notes')
+], Note);

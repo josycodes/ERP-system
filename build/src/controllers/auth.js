@@ -54,7 +54,10 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         return new Response_Lib_1.default(req, res)
             .setHeader({ 'access-token': token }).json({
             message: 'Successfully logged in',
-            data: User_Mapper_1.default.toDTO(user)
+            data: {
+                user: User_Mapper_1.default.toDTO(user),
+                token
+            }
         });
     }
     catch (error) {

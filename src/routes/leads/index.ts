@@ -9,6 +9,7 @@ import {
  import { authorizeRequest } from '../../middlewares/authorization';
 import { IRequestQuery } from '../../interfaces/requests/request.interface';
 import documentRoutes from './media';
+import notes from './notes';
 
 const routes = Router();
 
@@ -75,5 +76,7 @@ routes.patch('/update/status/:lead_id',
         }),
     }),
     updateLeadStatus);
+
+routes.use(notes)
 
 export default routes;

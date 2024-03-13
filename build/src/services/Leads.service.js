@@ -17,6 +17,7 @@ require("dotenv/config");
 const DBAdapter_1 = __importDefault(require("../adapters/DBAdapter"));
 const typeorm_1 = require("typeorm");
 const moment_1 = __importDefault(require("moment"));
+const LeadAssignment_entity_1 = require("../db/entities/LeadAssignment.entity");
 class LeadsService {
     constructor() { }
     ;
@@ -101,6 +102,14 @@ class LeadsService {
             return yield new DBAdapter_1.default().findOne(Lead_entity_1.Lead, {
                 where: { id: id },
                 relations: { customer: true, category: true },
+            });
+        });
+    }
+    findLeadAssignment(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield new DBAdapter_1.default().findOne(LeadAssignment_entity_1.LeadAssignment, {
+                where: { lead_id: id },
+                relations: { user: true },
             });
         });
     }
