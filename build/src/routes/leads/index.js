@@ -7,8 +7,10 @@ const celebrate_1 = require("celebrate");
 const express_1 = require("express");
 const leads_controller_1 = require("../../controllers/leads/leads.controller");
 const authorization_1 = require("../../middlewares/authorization");
+const media_1 = __importDefault(require("./media"));
 const notes_1 = __importDefault(require("./notes"));
 const routes = (0, express_1.Router)();
+routes.use('/document', media_1.default);
 routes.use(authorization_1.authorizeRequest);
 routes.post('/create', (0, celebrate_1.celebrate)({
     [celebrate_1.Segments.BODY]: celebrate_1.Joi.object({

@@ -9,6 +9,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MediaFile = void 0;
 const typeorm_1 = require("typeorm");
 const Base_entity_1 = require("./Base.entity");
+const User_entity_1 = require("./User.entity");
+const Lead_entity_1 = require("./Lead.entity");
 let MediaFile = class MediaFile {
 };
 exports.MediaFile = MediaFile;
@@ -16,8 +18,11 @@ __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)()
 ], MediaFile.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'user_id', type: 'int', nullable: false })
+    (0, typeorm_1.Column)({ name: 'user_id', type: 'int', nullable: true })
 ], MediaFile.prototype, "user_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'lead_id', type: 'int', nullable: true })
+], MediaFile.prototype, "lead_id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'name', type: 'varchar', nullable: false })
 ], MediaFile.prototype, "name", void 0);
@@ -25,11 +30,19 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'description', type: 'varchar', nullable: true })
 ], MediaFile.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'object_key', type: 'varchar', nullable: false })
+    (0, typeorm_1.Column)({ name: 'object_key', type: 'varchar', nullable: true })
 ], MediaFile.prototype, "object_key", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'url', type: 'varchar', nullable: true })
 ], MediaFile.prototype, "url", void 0);
+__decorate([
+    (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
+    (0, typeorm_1.ManyToOne)(() => User_entity_1.User)
+], MediaFile.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.JoinColumn)({ name: 'lead_id' }),
+    (0, typeorm_1.ManyToOne)(() => Lead_entity_1.Lead)
+], MediaFile.prototype, "lead", void 0);
 __decorate([
     (0, typeorm_1.Column)(() => Base_entity_1.Base, { prefix: false })
 ], MediaFile.prototype, "meta", void 0);
