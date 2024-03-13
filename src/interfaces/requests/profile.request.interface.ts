@@ -4,8 +4,7 @@ export interface IPasswordUpdateRequest {
 }
 
 export interface IProfileUpdateRequest {
-  first_name: string;
-  last_name: string;
+  name: string;
   email: string;
   profile_picture_id: number
 }

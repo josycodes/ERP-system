@@ -21,7 +21,7 @@ export default class ProfileService extends AuthService {
     super()
   }
 
-  async updateProfile(data: Partial<Pick<IProfileUpdateRequest & IAuthCompleteRegisterRequest, 'first_name' | 'last_name' | 'profile_picture_id'>>): Promise<User> {
+  async updateProfile(data: Partial<Pick<IProfileUpdateRequest & IAuthCompleteRegisterRequest, 'name' | 'profile_picture_id'>>): Promise<User> {
     if (data.profile_picture_id) {
       const media = await new DBAdapter().find(MediaFile, {
         where: { id: data.profile_picture_id, user_id: this.user.id, meta: { deleted_flag: false } }
@@ -31,8 +31,7 @@ export default class ProfileService extends AuthService {
     const user = await new DBAdapter().updateAndFetch(User,
       { id: this.user.id, meta: { deleted_flag: false } },
       {
-        first_name: data.first_name,
-        last_name: data.last_name,
+        name: data.name,
         profile_picture_id: data.profile_picture_id
       }
     );

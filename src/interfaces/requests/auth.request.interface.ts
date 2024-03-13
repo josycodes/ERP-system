@@ -3,8 +3,7 @@ export interface IAuthLoginRequest {
   password: string;
 }
 export interface IAuthCompleteRegisterRequest {
-  first_name: string;
-  last_name: string;
+  name: string;
   password: string;
 }
 
