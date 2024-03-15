@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import auth from './auth';
-import leads from './leads/index';
+import leads from './leads';
 import status from './resources/status';
 import category from './resources/category';
 

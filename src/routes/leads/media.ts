@@ -7,8 +7,6 @@ import {ILeadGetRequest} from "../../interfaces/requests/leads.request.interface
 
 const routes = Router();
 
-routes.use(authorizeRequest);
-
 routes.post(
     '/upload/:lead_id',
     celebrate({

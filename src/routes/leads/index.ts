@@ -12,9 +12,9 @@ import documentRoutes from './media';
 import notes from './notes';
 
 const routes = Router();
+routes.use(authorizeRequest);
 
 routes.use('/document', documentRoutes);
-routes.use(authorizeRequest);
 
 routes.post(
     '/create',
