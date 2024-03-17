@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.allLeadDocuments = exports.documentUpload = void 0;
 const Response_Lib_1 = __importDefault(require("../../libs/Response.Lib"));
-const Media_service_1 = __importDefault(require("../../services/Media.service"));
+const Media_Service_1 = __importDefault(require("../../services/Media.Service"));
 const Cloudinary_service_1 = __importDefault(require("../../services/Cloudinary.service"));
 const Document_Mapper_1 = __importDefault(require("../../mappers/Document.Mapper"));
 const Leads_service_1 = __importDefault(require("../../services/Leads.service"));
@@ -22,7 +22,7 @@ const Error_Lib_1 = require("../../libs/Error.Lib");
 const documentUpload = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { lead_id } = req.params;
     const leadService = new Leads_service_1.default();
-    const mediaService = new Media_service_1.default();
+    const mediaService = new Media_Service_1.default();
     try {
         //get lead
         const lead = yield leadService.findLeadById(parseInt(lead_id));
@@ -63,7 +63,7 @@ exports.documentUpload = documentUpload;
 const allLeadDocuments = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { lead_id } = req.params;
     const leadService = new Leads_service_1.default();
-    const mediaService = new Media_service_1.default();
+    const mediaService = new Media_Service_1.default();
     try {
         //get lead
         const lead = yield leadService.findLeadById(parseInt(lead_id));
