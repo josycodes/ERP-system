@@ -5,7 +5,7 @@ export interface INotesCreateRequest {
     content: string,
     status: NOTE_STATUS,
     documents?: INoteDocumentsRequest[] | null,
-    tags?: string[] | null,
+    tags?: [] | null,
 }
 
 export interface INoteDocumentsRequest {

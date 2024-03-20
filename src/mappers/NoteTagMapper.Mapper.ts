@@ -1,4 +1,3 @@
-
 import { NoteTag } from "../db/entities/NoteTag.entity";
 
 export default class NoteTagMapper {
@@ -10,6 +9,7 @@ export default class NoteTagMapper {
                 name: tag.user?.name,
                 picture: tag.user?.profile_picture?.url,
             } : null,
+            entity_data: tag.entity_data? tag.entity_data: null,
             created_on: tag.meta.created_on
         }
     }

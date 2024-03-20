@@ -9,12 +9,14 @@ import {
  import { authorizeRequest } from '../../middlewares/authorization';
 import { IRequestQuery } from '../../interfaces/requests/request.interface';
 import documentRoutes from './media';
+import emailRoutes from './email';
 import notes from './notes';
 
 const routes = Router();
 routes.use(authorizeRequest);
 
 routes.use('/document', documentRoutes);
+routes.use('/email', emailRoutes);
 
 routes.post(
     '/create',

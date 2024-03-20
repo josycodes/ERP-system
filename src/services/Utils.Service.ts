@@ -1,5 +1,5 @@
 import DBAdapter from "../adapters/DBAdapter";
-import { LeadCategory } from "../db/entities/LeadCategory";
+import { Category } from "../db/entities/Category.entity";
 import { IRequestQuery } from "../interfaces/requests/request.interface";
 
 export default class UtilsService {
@@ -11,6 +11,6 @@ export default class UtilsService {
   }
 
   static async getCategories() {
-    return await new DBAdapter().find(LeadCategory, { where: { meta: { deleted_flag: false }}});
+    return await new DBAdapter().find(Category, { where: { meta: { deleted_flag: false }}});
   }
 }

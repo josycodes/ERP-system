@@ -3,7 +3,7 @@ import {
     Column, JoinColumn, ManyToOne, OneToOne
 } from 'typeorm';
 import { Customer } from "./Customer.entity";
-import { LeadCategory } from "./LeadCategory";
+import { Category } from "./Category.entity";
 import { Base } from "./Base.entity";
 
 @Entity('leads')
@@ -34,11 +34,11 @@ export class Lead {
 
     @JoinColumn({ name: 'customer_id' })
     @ManyToOne(() => Customer)
-    'customer': Customer ;
+    'customer': Customer;
 
     @JoinColumn({ name: 'category_id' })
-    @ManyToOne(() => LeadCategory)
-    'category': LeadCategory;
+    @ManyToOne(() => Category)
+    'category': Category;
 
     @Column(() => Base, { prefix: false })
     'meta': Base;

@@ -1,6 +1,3 @@
-import { Customer } from "../db/entities/Customer.entity";
-import { User } from "../db/entities/User.entity";
-
 export default class TagMapper {
   public static toDTO(user: any ) {
     return {
@@ -15,6 +12,7 @@ export default class TagMapper {
           url: user.profile_picture.url,
         }
         : null,
+        entity: user.entity
     }
   }
 }

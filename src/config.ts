@@ -39,3 +39,8 @@ export enum NOTE_STATUS {
   DONE = 'done',
   AUTO_SAVE = 'auto-save'
 }
+
+export enum TEMPLATE_SHARE_TYPE {
+  EVERYONE = 'everyone',
+  USER = 'user'
+}

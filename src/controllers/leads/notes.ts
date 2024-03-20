@@ -70,7 +70,7 @@ export const getOne = async (req: express.Request, res: express.Response, next: 
     return new ResponseLib(req, res)
         .json({
             status: true,
-            message: 'Notes Loaded Successfully',
+            message: 'Note Loaded Successfully',
             data: NoteMapper.toDTO(note),
         });
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import ResponseLib from '../../libs/Response.Lib';
-import MediaService from '../../services/Media.Service';
+import MediaService from '../../services/Media.service';
 import CloudinaryService from '../../services/Cloudinary.service';
 import MediaMapper from "../../mappers/Document.Mapper";
 import LeadService from "../../services/Leads.service";
