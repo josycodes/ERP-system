@@ -17,7 +17,7 @@ export class NoteTag {
   @Column({ type: 'int', nullable: true })
   'tag_id': number;
 
-  @Column({ type: 'string', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   'entity': string;
 
   @Column({ type: 'int', nullable: true })
