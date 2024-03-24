@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Base } from './Base.entity';
 import { User } from './User.entity';
-import {Category} from "./Category.entity";
+import { Category } from './Category.entity';
 
 @Entity('templates')
 export class Template {
@@ -27,9 +27,9 @@ export class Template {
     @ManyToOne(() => User, (user) => user)
     'owner': User;
 
-    @JoinColumn({ name: 'owner_id' })
-    @ManyToOne(() => Category, (user) => user)
-    'category': User;
+    @JoinColumn({ name: 'category_id' })
+    @ManyToOne(() => Category, (category) => category)
+    'category': Category;
 
     @Column(() => Base, { prefix: false })
     'meta': Base;
