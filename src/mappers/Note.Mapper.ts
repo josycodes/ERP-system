@@ -14,12 +14,12 @@ export default class NoteMapper {
           status: note.status,
           owner: {
             id: note?.owner?.id,
-            email: note.owner.email,
-            first_name: note.owner.first_name,
-            last_name: note.owner.last_name,
+            email: note?.owner?.email,
+            first_name: note?.owner?.first_name,
+            last_name: note?.owner?.last_name,
             profile_picture: {
-              url: note.owner.profile_picture?.url,
-              name: note.owner.profile_picture?.name
+              url: note?.owner?.profile_picture?.url,
+              name: note?.owner?.profile_picture?.name
             }
           },
           documents: documents ? documents.map((d : any) => NoteDocumentMapper.toDTO(d)) : [],

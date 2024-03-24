@@ -4,7 +4,6 @@ import { BadRequest } from '../../libs/Error.Lib';
 import ResponseLib from '../../libs/Response.Lib';
 import { IRequestQuery } from '../../interfaces/requests/request.interface';
 import UtilsService from '../../services/Utils.Service';
-import UserMapper from '../../mappers/User.Mapper';
 import TagMapper from '../../mappers/Tag.Mapper';
 import TemplateService from "../../services/Template.service";
 import TemplateMapper from "../../mappers/Template.Mapper";
@@ -76,12 +75,14 @@ export const update = async (req: express.Request, res: express.Response, next: 
         const data = req.body;
 
         const templateService = new TemplateService();
-        const note = await templateService.updateTemplate(Number(template_id), user.id, data)
+        const template = await templateService.updateTemplate(Number(template_id), user.id, data)
         return new ResponseLib(req, res)
             .json({
                 status: true,
                 message: 'Template updated Successfully',
-                data: TemplateMapper .toDTO(note),
+                data: {
+                    ...TemplateMapper.toDTO(template.newTemplate)
+                }
             });
 
     } catch(error) {

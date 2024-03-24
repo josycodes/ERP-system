@@ -28,7 +28,7 @@ export default class TemplateService {
 
         interface Share {
             to: string,
-            user_id: number,
+            user_id?: number,
         }
         const template = await new DBAdapter().insertAndFetch(Template, {
             title: data.title,
@@ -36,7 +36,7 @@ export default class TemplateService {
             content: data.content,
             category_id: data.category_id,
             owner_id
-        });
+        }, { owner: true});
 
         let tags;
         if (data?.tags && Object.keys(data.tags).length > 0) {
@@ -47,7 +47,14 @@ export default class TemplateService {
 
         if (data?.share_with && Object.keys(data.share_with).length > 0) {
             await Promise.all(
-                data.share_with.map(async (share: Share) => await this.storeTemplateShare(template.id, share.to, share.user_id))
+                data.share_with.map(async (share: Share) => {
+                    if (share.user_id) {
+                        return await this.storeTemplateShare(template.id, share.to, share.user_id);
+                    }else{
+                        return await this.storeTemplateShare(template.id, share.to);
+
+                    }
+                })
             );
         }
         return { template, tags };
@@ -62,7 +69,7 @@ export default class TemplateService {
         })
     }
 
-    async storeTemplateShare (template_id: number, to: string, user_id: number) {
+    async storeTemplateShare (template_id: number, to: string, user_id?: number) {
         return await new DBAdapter().insertAndFetch(TemplateShare, {
             template_id,
             share_type: to,
@@ -85,8 +92,6 @@ export default class TemplateService {
             where:
                 {
                     title: !search ? Not(IsNull()) : ILike("%" + search + "%"), ...query,
-                    subject: !search ? Not(IsNull()) : ILike("%" + search + "%"), ...query,
-                    content: !search ? Not(IsNull()) : ILike("%" + search + "%"), ...query,
                     meta: { deleted_flag: false }
                 },
             skip,
@@ -95,7 +100,6 @@ export default class TemplateService {
                 owner: true,
                 category: true
             },
-
             order: { id: 'DESC' }
         })
         return {items: templates, total};
@@ -147,8 +151,9 @@ export default class TemplateService {
         const template = await db.findOne(Template, {
             where: { id: template_id, owner_id: user_id }
         });
-        if (!template) throw new BadRequest('Template not found.');
-        const { title, subject, content, category, share_with, tags } = updates;
+
+        if (!template) throw new BadRequest('Template not found or not belongs to you.');
+        const { title, subject, content, category_id, share_with, tags } = updates;
         let newTags;
 
         if (tags) {
@@ -166,14 +171,14 @@ export default class TemplateService {
             await db.find(TemplateShare, {  where: { template_id, meta: { deleted_flag: false } }})
         }
 
-
-        const newNote = await db.updateAndFetch(Template, { id: template_id, owner_id: user_id }, {
+        const newTemplate = await db.updateAndFetch(Template, { id: template_id, owner_id: user_id }, {
             title,
             subject,
-            content
+            content,
+            category_id
         }, {}, { owner: true })
         return {
-            ...newNote,
+            newTemplate,
             tags: newTags
         };
     }

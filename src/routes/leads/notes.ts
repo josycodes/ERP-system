@@ -20,7 +20,7 @@ routes.post(
                 object_key: Joi.string(),
             }).optional(),
             tags: Joi.array().items({
-                id: Joi.number().positive(),
+                tag_id: Joi.number().positive(),
                 entity_id:Joi.number().positive(),
                 entity: Joi.string()
             }).optional(),

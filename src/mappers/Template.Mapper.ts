@@ -1,4 +1,5 @@
 import TemplateTagMapper from "./TemplateTag.Mapper";
+import {TemplateTag} from "../db/entities/TemplateTag.entity";
 
 export default class TemplateMapper {
     public static toDTO(template: any) {
@@ -19,7 +20,7 @@ export default class TemplateMapper {
                     name: template.owner.profile_picture?.name
                 }
             },
-            tags: tags ? tags.map((t: any) => TemplateTagMapper.toDTO(t)) : [],
+            tags: tags?tags.map((t: TemplateTag) => TemplateTagMapper.toDTO(t)) : [],
             created_on: template.meta.created_on,
             modified_on: template.meta.modified_on
         }

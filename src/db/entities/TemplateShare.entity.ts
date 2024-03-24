@@ -11,7 +11,7 @@ export class TemplateShare {
     @Column({ type: 'int', nullable: true })
     'template_id': number;
 
-    @Column({ type: 'string', nullable: true })
+    @Column({ type: 'varchar', nullable: true })
     'share_type': string;
 
     @Column({ type: 'int', nullable: true })

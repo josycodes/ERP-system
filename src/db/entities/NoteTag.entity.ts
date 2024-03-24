@@ -17,7 +17,7 @@ export class NoteTag {
   @Column({ type: 'int', nullable: true })
   'tag_id': number;
 
-  @Column({ type: 'string', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   'entity': string;
 
   @Column({ type: 'int', nullable: true })
@@ -27,13 +27,9 @@ export class NoteTag {
   @ManyToOne(() => Note, { nullable: true })
   'note': Note | null;
 
-  @JoinColumn({ name: 'user__id' })
+  @JoinColumn({ name: 'user_id' })
   @ManyToOne(() => User, { nullable: true })
   'user': User | null;
-  //
-  // @JoinColumn({ name: 'entity_id' })
-  // @ManyToOne(() => Customer, { nullable: true })
-  // 'customer': Customer | null;
 
   @Column(() => Base, { prefix: false })
   'meta': Base;

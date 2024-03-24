@@ -3,8 +3,10 @@ import { Router } from 'express';
 import { ITemplateCreateRequest } from '../../interfaces/requests/templates.request.interface';
 import { IRequestQuery } from '../../interfaces/requests/request.interface';
 import { create, list, getOne, update, tagSearch } from "../../controllers/templates/template.controller";
+import {authorizeRequest} from "../../middlewares/authorization";
 
 const routes = Router();
+routes.use(authorizeRequest);
 
 routes.post(
     '/create',
@@ -15,15 +17,15 @@ routes.post(
             content: Joi.string().required(),
             category_id: Joi.number().required(),
             share_with: Joi.array().items({
-                to:Joi.string().required().valid(['everyone','user']),
+                to:Joi.string().required(),
                 user_id: Joi.number().when('to',{
                     is: 'user',
                     then: Joi.number().required(),
                     otherwise: Joi.number().optional()
                 })
-            }).optional(),
+            }).required(),
             tags: Joi.array().items({
-                id: Joi.number().positive(),
+                tag_id: Joi.number().positive(),
                 entity_id:Joi.number().positive(),
                 entity: Joi.string()
             }).optional()
@@ -60,29 +62,29 @@ routes.patch('/update/:template_id',
             template_id: Joi.number().positive()
         }),
         [Segments.BODY]:Joi.object<ITemplateCreateRequest, true>({
-        title: Joi.string().required(),
-        subject: Joi.string().required(),
-        content: Joi.string().required(),
-        category_id: Joi.number().required(),
-        share_with: Joi.array().items({
-            to:Joi.string().required().valid(['everyone','user']),
-            user_id: Joi.number().when('to',{
-                is: 'user',
-                then: Joi.number().required(),
-                otherwise: Joi.number().optional()
-            })
-        }).optional(),
-        tags: Joi.array().items({
-            id: Joi.number().positive(),
-            entity_id:Joi.number().positive(),
-            entity: Joi.string()
-        }).optional()
+            title: Joi.string().required(),
+            subject: Joi.string().required(),
+            content: Joi.string().required(),
+            category_id: Joi.number().required(),
+            share_with: Joi.array().items({
+                to:Joi.string().required(),
+                user_id: Joi.number().when('to',{
+                    is: 'user',
+                    then: Joi.number().required(),
+                    otherwise: Joi.number().optional()
+                })
+            }).optional(),
+            tags: Joi.array().items({
+                tag_id: Joi.number().positive(),
+                entity_id:Joi.number().positive(),
+                entity: Joi.string()
+            }).optional()
         })
     }),
     update
 )
 
-routes.get('/search-tags',
+routes.get('/search/tags',
     celebrate({
         [Segments.QUERY]: Joi.object({
             query: Joi.string()

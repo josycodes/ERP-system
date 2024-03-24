@@ -27,7 +27,7 @@ export default class NoteService {
       content: data.content,
       owner_id,
       status: data.status,
-    });
+    },{ owner: true });
     let docs;
     let tags;
     if (data?.documents?.length) {
@@ -125,9 +125,9 @@ export default class NoteService {
     for (const tag of tags) {
       let entityData;
       if (tag.entity === 'User') {
-        entityData = await new DBAdapter().findOne(User,{where: {id: tag.entity_id}});
+        entityData = await new DBAdapter().findOne(User,{where: {id: tag.entity_id, meta: { deleted_flag: false}}});
       } else if (tag.entity === 'Customer') {
-        entityData = await new DBAdapter().findOne(Customer,{where: {id: tag.entity_id}});
+        entityData = await new DBAdapter().findOne(Customer,{where: {id: tag.entity_id, meta: { deleted_flag: false}}});
       }
 
       // Add the entity_data attribute to the tag
