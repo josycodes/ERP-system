@@ -1,12 +1,10 @@
 import express from 'express';
 import ResponseLib from '../../libs/Response.Lib';
-import MediaService from '../../services/Media.Service';
+import MediaService from '../../services/Media.service';
 import CloudinaryService from '../../services/Cloudinary.service';
 import MediaMapper from "../../mappers/Document.Mapper";
 import LeadService from "../../services/Leads.service";
 import {BadRequest} from "../../libs/Error.Lib";
-import LeadMapper from "../../mappers/Lead.Mapper";
-import UtilsService from "../../services/Utils.Service";
 
 
 export const documentUpload = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
